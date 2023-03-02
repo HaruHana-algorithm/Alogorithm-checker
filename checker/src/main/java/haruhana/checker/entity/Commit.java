@@ -3,6 +3,8 @@ package haruhana.checker.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -20,4 +22,11 @@ public class Commit {
 
 	@Enumerated(EnumType.STRING)
 	private State state;
+
+	private LocalDate localDate;
+
+
+	public void updateCommitInfo(State state){
+		this.state=state;
+	}
 }

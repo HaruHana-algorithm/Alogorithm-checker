@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -39,32 +40,32 @@ public class GithubService {
 		ZoneId kstZoneId=ZoneId.of("Asia/Seoul");
 		DateTimeFormatter isoFormatter = DateTimeFormatter.ISO_DATE_TIME;
 
-		System.out.println("response="+forObject);
-
 
 		for (JsonElement commit : commits) {
 			JsonObject commitObj = commit.getAsJsonObject();
 			JsonObject commitData = commitObj.getAsJsonObject("commit");
+			JsonObject author = commitObj.getAsJsonObject("author");
 			String commitDateStr = commitData.getAsJsonObject("author").get("date").getAsString();
 			String username = commitData.getAsJsonObject("author").get("name").getAsString();
 			String user_email = commitData.getAsJsonObject("author").get("email").getAsString();
-			String img_url = commitData.getAsJsonObject("author").get("avatar_url").getAsString();
+			String img_url = author.get("avatar_url").getAsString();
 
+			System.out.println("commitData="+commitData);
 
 			ZonedDateTime utcDateTime = ZonedDateTime.parse(commitDateStr, isoFormatter.withZone(utcZoneId));
 			// convert UTC time to KST time
 			ZonedDateTime kstDateTime = utcDateTime.withZoneSameInstant(kstZoneId);
 			// format date as string in "yyyy-MM-dd HH:mm:ss" format
-			String kstDateTimeStr = kstDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+			String kstDateTimeStr = kstDateTime.toLocalDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-			LocalDateTime commitDate = LocalDateTime.parse(kstDateTimeStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+			LocalDate commitDate = LocalDate.parse(kstDateTimeStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
 			setInitializeMemberInfo(username,user_email,commitDate,img_url);
 		}
 	}
 
 
-	private void setInitializeMemberInfo(String username,String email,LocalDateTime commitTime,String imgUrl){
+	private void setInitializeMemberInfo(String username,String email,LocalDate commitTime,String imgUrl){
 		MemberDTO memberDTO=new MemberDTO();
 		memberDTO.setName(username);
 		memberDTO.setEmail(email);

@@ -4,6 +4,7 @@ package haruhana.checker.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -22,14 +23,14 @@ public class Member {
 
 	private String email;
 
-	private LocalDateTime commitTime;
+	private LocalDate commitTime;
 
 	private String imgUrl;
 
 	@OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
 	private List<Commit> commit;
 
-	public void updateMemberInfo(String name,String email,LocalDateTime commitTime,String imgUrl){
+	public void updateMemberInfo(String name,String email,LocalDate commitTime,String imgUrl){
 		this.name=name;
 		this.email=email;
 		this.commitTime=commitTime;

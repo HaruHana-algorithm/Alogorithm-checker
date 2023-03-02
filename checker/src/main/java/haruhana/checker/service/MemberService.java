@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,8 +28,9 @@ public class MemberService {
 				);*/
 		Optional<Member> findM = memberRepository.findByName(memberDTO.getName());
 		if (findM.isPresent()){
-			System.out.println("findM="+findM.get().getCommitTime());
-			findM.get().updateMemberInfo(memberDTO.getName(),memberDTO.getEmail(),memberDTO.getCommitTime(),memberDTO.getImgUrl());
+			LocalDate own = findM.get().getCommitTime();
+			LocalDate localInfoCompare = getLocalInfoCompare(own, memberDTO.getCommitTime());
+			findM.get().updateMemberInfo(memberDTO.getName(),memberDTO.getEmail(),localInfoCompare,memberDTO.getImgUrl());
 		}else {
 			memberRepository.save(memberDTO.toEntity());
 		}
@@ -35,5 +38,10 @@ public class MemberService {
 
 	public List<Member> getMemberList(){
 		return memberRepository.findAll();
+	}
+
+
+	private LocalDate getLocalInfoCompare(LocalDate own,LocalDate geu){
+		return own.isAfter(geu) ? own : geu;
 	}
 }

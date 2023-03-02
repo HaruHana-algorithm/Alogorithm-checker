@@ -4,14 +4,14 @@ import haruhana.checker.entity.Member;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @Setter
 public class MemberDTO {
 	private String name;
 	private String email;
-	private LocalDateTime commitTime;
+	private LocalDate commitTime;
 	private String imgUrl;
 
 	public Member toEntity(){

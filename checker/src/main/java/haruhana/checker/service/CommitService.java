@@ -47,4 +47,8 @@ public class CommitService {
 			commitRepository.save(commitDTO.toEntity());
 		}
 	}
+
+	public boolean dayCheckForReadme(LocalDate check_day,Member member){
+		return commitRepository.findByMemberAndLocalDate(member, check_day).get().getState().equals("CHECK");
+	}
 }

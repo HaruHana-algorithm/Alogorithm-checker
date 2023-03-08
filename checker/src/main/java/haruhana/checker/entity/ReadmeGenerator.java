@@ -51,7 +51,6 @@ public class ReadmeGenerator {
 		sb.append("\n");
 		// 참여자 정보 작성
 		for (Member member :memberService.getMemberList()) {
-			sb.append("\n");
 			sb.append("|").append(member.getName()).append("|");
 			for (int i = monthOfStart; i <monthOfEnd; i++) {
 				if (commitService.dayCheckForReadme(start,member)) {

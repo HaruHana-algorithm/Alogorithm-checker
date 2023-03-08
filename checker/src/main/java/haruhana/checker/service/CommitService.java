@@ -4,6 +4,7 @@ import haruhana.checker.dto.CommitDTO;
 import haruhana.checker.entity.Commit;
 import haruhana.checker.entity.Member;
 import haruhana.checker.entity.State;
+import haruhana.checker.entity.redis.MemberCommit;
 import haruhana.checker.repo.CommitRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -25,6 +26,8 @@ public class CommitService {
 
 	private final CommitRepository commitRepository;
 
+	private final MemberCommitService memberCommitService;
+
 
 	public void getTodayLearnCheck(){
 		List<Member> memberList = memberService.getMemberList();
@@ -37,8 +40,8 @@ public class CommitService {
 			for (Member m:memberList){
 				CommitDTO commitDTO=new CommitDTO();
 				commitDTO.setMember(m);
+				commitDTO.setState(State.UNCHECK);
 				commitDTO.setLocalDate(start);
-				commitDTO.setState(compareLocalDateToday(m.getCommitTime(),start));
 				saveOrUpdate(commitDTO);
 			}
 			start=start.plusDays(1);
@@ -60,11 +63,26 @@ public class CommitService {
 	}
 
 	public boolean dayCheckForReadme(LocalDate check_day,Member member){
-		System.out.println("CheckDay="+check_day);
-		System.out.println("Member="+member.getMember_id());
 
 		Optional<Commit> findC = commitRepository.findByMemberAndLocalDate(member, check_day);
 		System.out.println("state="+findC.get().getState());
 		return findC.get().getState().toString().equals("CHECK");
+	}
+
+	public void commitStateUpdate(){
+		List<MemberCommit> infoAllMemberCommit = memberCommitService.getInfoAllMemberCommit();
+		for (MemberCommit memberCommit:infoAllMemberCommit){
+
+			System.out.println("memberCommit="+memberCommit.getName());
+			System.out.println("memberCommitTime="+memberCommit.getCommitTime());
+			if (memberCommit.getName().equals("Lee.t.c")){
+				continue;
+			}
+			Member findM = memberService.getMemberInfoByName(memberCommit.getName());
+
+			commitRepository.findByMemberAndLocalDate(findM,memberCommit.getCommitTime()).get().updateCommitInfo(State.CHECK);
+		}
+
+
 	}
 }

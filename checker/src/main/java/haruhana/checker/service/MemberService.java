@@ -1,5 +1,6 @@
 package haruhana.checker.service;
 
+import haruhana.checker.dto.MemberCommitDTO;
 import haruhana.checker.dto.MemberDTO;
 import haruhana.checker.entity.Member;
 import haruhana.checker.repo.MemberRepository;
@@ -11,6 +12,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Transactional(readOnly = true)
@@ -19,8 +21,12 @@ public class MemberService {
 
 	private final MemberRepository memberRepository;
 
+
+	private final MemberCommitService memberCommitService;
+
 	@Transactional
 	public void setInitializeMemberInfo(MemberDTO memberDTO){
+		memberRedisSave(memberDTO);
 		/*memberRepository.findByName(memberDTO.getName())
 				.ifPresentOrElse(
 						existMember->existMember.updateMemberInfo(memberDTO.getName(),memberDTO.getEmail(),memberDTO.getCommitTime()),
@@ -29,7 +35,9 @@ public class MemberService {
 		Optional<Member> findM = memberRepository.findByName(memberDTO.getName());
 		if (findM.isPresent()){
 			LocalDate own = findM.get().getCommitTime();
-			LocalDate localInfoCompare = getLocalInfoCompare(own, memberDTO.getCommitTime());
+			LocalDate commitTime = memberDTO.getCommitTime();
+			LocalDate localInfoCompare = getLocalInfoCompare(own,commitTime);
+
 			findM.get().updateMemberInfo(memberDTO.getName(),memberDTO.getEmail(),localInfoCompare,memberDTO.getImgUrl());
 		}else {
 			memberRepository.save(memberDTO.toEntity());
@@ -45,4 +53,15 @@ public class MemberService {
 		return own.isAfter(geu) ? own : geu;
 	}
 
+	public Member getMemberInfoByName(String name){
+		return memberRepository.findByName(name).get();
+	}
+
+	private void memberRedisSave(MemberDTO memberDTO){
+		MemberCommitDTO memberCommitDTO=new MemberCommitDTO();
+		memberCommitDTO.setId(UUID.randomUUID().toString());
+		memberCommitDTO.setName(memberDTO.getName());
+		memberCommitDTO.setLocalDate(memberDTO.getCommitTime());
+		memberCommitService.saveTempMemberCommitList(memberCommitDTO);
+	}
 }

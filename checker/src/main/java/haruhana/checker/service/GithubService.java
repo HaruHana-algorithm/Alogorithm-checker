@@ -50,8 +50,6 @@ public class GithubService {
 			String user_email = commitData.getAsJsonObject("author").get("email").getAsString();
 			String img_url = author.get("avatar_url").getAsString();
 
-			System.out.println("commitData="+commitData);
-
 			ZonedDateTime utcDateTime = ZonedDateTime.parse(commitDateStr, isoFormatter.withZone(utcZoneId));
 			// convert UTC time to KST time
 			ZonedDateTime kstDateTime = utcDateTime.withZoneSameInstant(kstZoneId);

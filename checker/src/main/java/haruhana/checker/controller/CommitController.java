@@ -14,5 +14,7 @@ public class CommitController {
 	@PostMapping("/api/repo/commitCheck")
 	public void getRepoCommitCheck(){
 		commitService.getTodayLearnCheck();
+		commitService.commitStateUpdate();
 	}
+
 }

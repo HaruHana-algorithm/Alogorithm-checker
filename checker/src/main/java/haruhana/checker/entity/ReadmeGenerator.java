@@ -37,33 +37,50 @@ public class ReadmeGenerator {
 		YearMonth yearMonth = YearMonth.now();
 		LocalDate start = yearMonth.atDay(1);
 		LocalDate end = yearMonth.atEndOfMonth();
-		sb.append("| 참여자 | 횟수 | ");
+		sb.append("| 참여자 | ");
 		int monthOfStart = start.getDayOfMonth();
 		int monthOfEnd = end.getDayOfMonth();
 		for (int i=monthOfStart;i<=monthOfEnd;i++){
 			sb.append(i).append("일 | ");
 		}
 		sb.append("\n");
-		sb.append("| --- | --- | ");
-		for (int i = 1; i <= 31; i++) {
+		sb.append("| --- | ");
+		for (int i = monthOfStart; i <=monthOfEnd; i++) {
 			sb.append("--- | ");
 		}
 		sb.append("\n");
-
 		// 참여자 정보 작성
 		for (Member member :memberService.getMemberList()) {
+			sb.append("\n");
 			sb.append("|").append(member.getName()).append("|");
-			int count = 0;
 			for (int i = monthOfStart; i <monthOfEnd; i++) {
 				if (commitService.dayCheckForReadme(start,member)) {
-					count++;
 					sb.append(":white_check_mark:");
+				}else {
+					sb.append(":x:");
 				}
 				start=start.plusDays(1);
 				sb.append("|");
 			}
+			start=yearMonth.atDay(1);
 			sb.append("\n");
 		}
+		/*sb.append("\n");
+		sb.append("\n");
+		sb.append("| 참여자 | 횟수 | ");
+		for (Member member:memberService.getMemberList()){
+			sb.append("|").append(member.getName()).append("|");
+			int count = 0;
+			start=yearMonth.atDay(1);
+			for (int i=monthOfStart;i<=monthOfEnd;i++){
+				if (commitService.dayCheckForReadme(start,member)) {
+					count++;
+				}
+				start=start.plusDays(1);
+			}
+			sb.append(count+"|");
+			sb.append("\n");
+		}*/
 
 		System.out.println(sb);
 		writeReadMeFile(sb.toString());

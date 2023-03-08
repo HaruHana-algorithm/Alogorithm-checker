@@ -3,10 +3,10 @@ spring:
     hibernate:
       ddl-auto: update
   datasource:
-    url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
+    url: jdbc:mariadb://localhost:3306/checker
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: root
+    password: 1234
 
   h2:
     console:

@@ -6,16 +6,19 @@ import haruhana.checker.entity.Member;
 import haruhana.checker.entity.State;
 import haruhana.checker.repo.CommitRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Log4j2
 public class CommitService {
 
 	private final MemberService memberService;
@@ -25,17 +28,25 @@ public class CommitService {
 
 	public void getTodayLearnCheck(){
 		List<Member> memberList = memberService.getMemberList();
-		for (Member m:memberList){
-			CommitDTO commitDTO=new CommitDTO();
-			commitDTO.setMember(m);
-			commitDTO.setLocalDate(LocalDate.now());
-			commitDTO.setState(compareLocalDateToday(m.getCommitTime()));
-			saveOrUpdate(commitDTO);
+		YearMonth yearMonth = YearMonth.now();
+		LocalDate start = yearMonth.atDay(1);
+		LocalDate end = yearMonth.atEndOfMonth();
+		int monthOfStart = start.getDayOfMonth();
+		int monthOfEnd = end.getDayOfMonth();
+		for (int i=monthOfStart;i<monthOfEnd;i++){
+			for (Member m:memberList){
+				CommitDTO commitDTO=new CommitDTO();
+				commitDTO.setMember(m);
+				commitDTO.setLocalDate(start);
+				commitDTO.setState(compareLocalDateToday(m.getCommitTime(),start));
+				saveOrUpdate(commitDTO);
+			}
+			start=start.plusDays(1);
 		}
 	}
 
-	private State compareLocalDateToday(LocalDate member_localDate){
-		if (member_localDate.equals(LocalDate.now())) return State.CHECK;
+	private State compareLocalDateToday(LocalDate member_localDate,LocalDate compare_date){
+		if (member_localDate.equals(compare_date)) return State.CHECK;
 		else return State.UNCHECK;
 	}
 
@@ -49,6 +60,11 @@ public class CommitService {
 	}
 
 	public boolean dayCheckForReadme(LocalDate check_day,Member member){
-		return commitRepository.findByMemberAndLocalDate(member, check_day).get().getState().equals("CHECK");
+		System.out.println("CheckDay="+check_day);
+		System.out.println("Member="+member.getMember_id());
+
+		Optional<Commit> findC = commitRepository.findByMemberAndLocalDate(member, check_day);
+		System.out.println("state="+findC.get().getState());
+		return findC.get().getState().toString().equals("CHECK");
 	}
 }

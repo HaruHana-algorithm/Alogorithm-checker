@@ -44,4 +44,5 @@ public class MemberService {
 	private LocalDate getLocalInfoCompare(LocalDate own,LocalDate geu){
 		return own.isAfter(geu) ? own : geu;
 	}
+
 }

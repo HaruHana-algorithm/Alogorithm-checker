@@ -56,7 +56,11 @@ public class ReadmeGenerator {
 				if (commitService.dayCheckForReadme(start,member)) {
 					sb.append(":white_check_mark:");
 				}else {
-					sb.append(":x:");
+					if (isNowAfter(start)){
+						sb.append(" ");
+					}else {
+						sb.append(":x:");
+					}
 				}
 				start=start.plusDays(1);
 				sb.append("|");
@@ -99,5 +103,9 @@ public class ReadmeGenerator {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private boolean isNowAfter(LocalDate checkDate){
+		return checkDate.isAfter(LocalDate.now());
 	}
 }

@@ -2,7 +2,7 @@
 
 ## 사용기술
 - SpringBoot
-- H2 Database
+- Maria Database
 
 ## 흐름도
 - RestTemplate을 사용하여 특정 레포지토리의 유저 커밋정보를 가져온다.

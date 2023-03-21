@@ -28,6 +28,7 @@ public class GithubService {
 	public static final String git_repo="HaruHana-algorithm";
 
 	public void getRepoContributors(){
+		long start1 = System.currentTimeMillis();
 		RestTemplate restTemplate=new RestTemplate();
 
 		String url="https://api.github.com/repos/"+git_owner+"/"+git_repo+"/commits";
@@ -39,8 +40,10 @@ public class GithubService {
 		ZoneId utcZoneId=ZoneId.of("UTC");
 		ZoneId kstZoneId=ZoneId.of("Asia/Seoul");
 		DateTimeFormatter isoFormatter = DateTimeFormatter.ISO_DATE_TIME;
+		long end1 = System.currentTimeMillis();
+		System.out.println("logging1="+(end1-start1)+"seconds");
 
-
+		long start2 = System.currentTimeMillis();
 		for (JsonElement commit : commits) {
 			JsonObject commitObj = commit.getAsJsonObject();
 			JsonObject commitData = commitObj.getAsJsonObject("commit");
@@ -60,6 +63,8 @@ public class GithubService {
 
 			setInitializeMemberInfo(username,user_email,commitDate,img_url);
 		}
+		long end2 = System.currentTimeMillis();
+		System.out.println("logging2="+(end2-start2)+"seconds");
 	}
 
 

@@ -42,6 +42,8 @@ public class MemberService {
 		}else {
 			memberRepository.save(memberDTO.toEntity());
 		}
+		long StopAPILog = System.currentTimeMillis();
+		System.out.println("AllLog="+(double)((StopAPILog-GithubService.allLog)/1000.0)+"seconds");
 	}
 
 	public List<Member> getMemberList(){

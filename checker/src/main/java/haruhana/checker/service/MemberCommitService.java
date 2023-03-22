@@ -24,8 +24,6 @@ public class MemberCommitService {
 
 	@Transactional
 	public void saveTempMemberCommitList(MemberCommitDTO memberCommitDTO){
-		System.out.println("MemberDTO="+memberCommitDTO.getName());
-		System.out.println("MemberDTOTIme="+memberCommitDTO.getLocalDate());
 		memberCommitRepository.save(memberCommitDTO.toEntity());
 	}
 

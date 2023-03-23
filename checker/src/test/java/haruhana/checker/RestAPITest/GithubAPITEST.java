@@ -32,12 +32,12 @@ public class GithubAPITEST {
 
 
 	@Test
-	@DisplayName("HttpURLConnection 1회 Response 속도")
+	@DisplayName("WebClient 1회 Response 속도")
 	public void usedWebClientConnectionGit(){
 		long wcStart = System.currentTimeMillis();
 		githubService.useToWebClient();
 		long wcEnd = System.currentTimeMillis();
-		System.out.println("HttpURLConnection 1회 요청 평균 응답속도="+(double) ((wcEnd-wcStart)/1000.0));
+		System.out.println("WebClient 1회 요청 평균 응답속도="+(double) ((wcEnd-wcStart)/1000.0));
 	}
 
 

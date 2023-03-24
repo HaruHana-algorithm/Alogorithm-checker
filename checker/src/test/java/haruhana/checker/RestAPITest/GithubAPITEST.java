@@ -41,7 +41,7 @@ public class GithubAPITEST {
 	}
 
 
-	@Test
+	/*@Test
 	@DisplayName("RestTemplate 평균 100회 Response 속도")
 	public void usedToRestTemplateConnectGit100(){
 		double sum=0;
@@ -56,13 +56,14 @@ public class GithubAPITEST {
 
 	@Test
 	@DisplayName("HttpURLConnection 평균 100회 Response 속도")
-	public void usedToHttpUrlConnectionGit100(){
+	public void usedToHttpUrlConnectionGit100() throws InterruptedException {
 		double sum=0;
 		for (int i=0;i<100;i++){
 			long hucStart = System.currentTimeMillis();
 			githubService.useToHttpURLConnection();
 			long hucEnd = System.currentTimeMillis();
 			sum+=(double) ((hucEnd-hucStart)/1000.0);
+			Thread.sleep(1);
 		}
 		System.out.println("HttpURLConnection 100회 요청 평균 응답속도="+sum/100);
 	}
@@ -78,5 +79,5 @@ public class GithubAPITEST {
 			sum+=(double) ((wcEnd-wcStart)/1000.0);
 		}
 		System.out.println("WebClient 100회 요청 평균 응답속도="+sum/100);
-	}
+	}*/
 }

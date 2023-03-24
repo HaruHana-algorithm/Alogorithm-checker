@@ -92,7 +92,6 @@ public class GithubService {
 
 	public void useToRestTemplate(){
 		RestTemplate restTemplate=new RestTemplate();
-
 		String forObject = restTemplate.getForObject(url, String.class);
 	}
 
@@ -103,6 +102,9 @@ public class GithubService {
 			URL url = new URL("https://api.github.com/repos/" + git_owner + "/" + git_repo + "/commits");
 			conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
+			conn.setRequestProperty("Connection", "Keep-Alive");
+			conn.setRequestProperty("Accept-Encoding", "gzip, deflate");
+
 			conn.setRequestProperty("Accept", "application/json");
 
 			if (conn.getResponseCode() != 200) {

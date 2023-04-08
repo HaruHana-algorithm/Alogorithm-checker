@@ -94,7 +94,6 @@ public class ReadmeGenerator {
 			YearMonth yearMonth = YearMonth.now();
 			int year = yearMonth.atDay(1).getYear();
 			int monthValue = yearMonth.atDay(1).getMonthValue();
-
 			File file = new File(year+"_"+monthValue+".md");
 			FileWriter writer = new FileWriter(file);
 			writer.write(contents);

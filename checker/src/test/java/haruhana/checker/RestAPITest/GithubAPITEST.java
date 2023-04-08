@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.io.IOException;
+
 @SpringBootTest
 public class GithubAPITEST {
 
@@ -40,6 +42,23 @@ public class GithubAPITEST {
 		System.out.println("WebClient 1회 요청 평균 응답속도="+(double) ((wcEnd-wcStart)/1000.0));
 	}
 
+	@Test
+	@DisplayName("HttpComponents 1회 Response 속도")
+	public void usedToHttpComponentsConnectionGit() throws IOException {
+		long hucStart = System.currentTimeMillis();
+		githubService.useToHttpComponents();
+		long hucEnd = System.currentTimeMillis();
+		System.out.println("HttpComponents 1회 요청 평균 응답속도="+(double) ((hucEnd-hucStart)/1000.0));
+	}
+
+	@Test
+	@DisplayName("OkHttp 1회 Response 속도")
+	public void usedToOkHttpConnectionGit() throws IOException {
+		long hucStart = System.currentTimeMillis();
+		githubService.useToOkHttp();
+		long hucEnd = System.currentTimeMillis();
+		System.out.println("OkHttp 1회 요청 평균 응답속도="+(double) ((hucEnd-hucStart)/1000.0));
+	}
 
 	/*@Test
 	@DisplayName("RestTemplate 평균 100회 Response 속도")

@@ -6,12 +6,22 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import haruhana.checker.dto.MemberDTO;
 import lombok.RequiredArgsConstructor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -111,7 +121,7 @@ public class GithubService {
 				throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
 			}
 
-			BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+			BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())),8192);
 
 			StringBuilder response = new StringBuilder();
 			String output;
@@ -134,5 +144,25 @@ public class GithubService {
 				.retrieve()
 				.bodyToMono(String.class)
 				.block();
+	}
+
+	public void useToHttpComponents() throws IOException {
+		CloseableHttpClient httpClient = HttpClients.createDefault();
+		HttpGet request = new HttpGet("https://api.github.com/repos/" + git_owner + "/" + git_repo + "/commits");
+		request.setHeader("Accept-Encoding", "gzip, deflate");
+		HttpResponse response = httpClient.execute(request);
+		HttpEntity entity = response.getEntity();
+		EntityUtils.toString(entity);
+		httpClient.close();
+	}
+
+	public void useToOkHttp() throws IOException {
+		OkHttpClient client = new OkHttpClient();
+		Request request = new Request.Builder()
+				.url("https://api.github.com/repos/" + git_owner + "/" + git_repo + "/commits")
+				.header("Accept-Encoding", "gzip, deflate")
+				.build();
+		Response response = client.newCall(request).execute();
+		String forObject = response.body().string();
 	}
 }

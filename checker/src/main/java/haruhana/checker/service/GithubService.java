@@ -47,13 +47,35 @@ public class GithubService {
 	public void getRepoContributors(){
 		allLog=System.currentTimeMillis();
 		long start1 = System.currentTimeMillis();
-		WebClient webClient = WebClient.create();
+		HttpURLConnection conn = null;
+		String forObject="";
+		try {
+			URL url = new URL("https://api.github.com/repos/" + git_owner + "/" + git_repo + "/commits");
+			conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("Connection", "Keep-Alive");
+			conn.setRequestProperty("Accept-Encoding", "gzip, deflate");
+			conn.setReadTimeout(5000); // 읽기 타임아웃 5초
+			conn.setConnectTimeout(5000); // 연결 타임아웃 5초
+			conn.setRequestProperty("Accept", "application/json");
 
-		String forObject = webClient.get()
-				.uri(url)
-				.retrieve()
-				.bodyToMono(String.class)
-				.block();
+			if (conn.getResponseCode() != 200) {
+				throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+			}
+
+			BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())),8192);
+
+			StringBuilder response = new StringBuilder();
+			String output;
+			while ((output = br.readLine()) != null) {
+				response.append(output);
+			}
+
+			forObject = response.toString();
+
+		}catch (Exception e){
+			System.out.println(e.getMessage());
+		}
 		long end1 = System.currentTimeMillis();
 		System.out.println("logging1="+((end1-start1)/1000.0)+"seconds");
 
@@ -114,7 +136,8 @@ public class GithubService {
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Connection", "Keep-Alive");
 			conn.setRequestProperty("Accept-Encoding", "gzip, deflate");
-
+			conn.setReadTimeout(5000); // 읽기 타임아웃 5초
+			conn.setConnectTimeout(5000); // 연결 타임아웃 5초
 			conn.setRequestProperty("Accept", "application/json");
 
 			if (conn.getResponseCode() != 200) {

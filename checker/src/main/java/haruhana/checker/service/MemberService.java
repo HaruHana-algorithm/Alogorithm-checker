@@ -26,7 +26,10 @@ public class MemberService {
 
 	@Transactional
 	public void setInitializeMemberInfo(MemberDTO memberDTO){
+		long rS = System.currentTimeMillis();
 		memberRedisSave(memberDTO);
+		long rE = System.currentTimeMillis();
+		System.out.println("redis="+(double)((rE-rS)/1000.0)+"seconds");
 		/*memberRepository.findByName(memberDTO.getName())
 				.ifPresentOrElse(
 						existMember->existMember.updateMemberInfo(memberDTO.getName(),memberDTO.getEmail(),memberDTO.getCommitTime()),
@@ -43,7 +46,7 @@ public class MemberService {
 			memberRepository.save(memberDTO.toEntity());
 		}
 		long StopAPILog = System.currentTimeMillis();
-		System.out.println("AllLog="+(double)((StopAPILog-GithubService.allLog)/1000.0)+"seconds");
+//		System.out.println("AllLog="+(double)((StopAPILog-GithubService.allLog)/1000.0)+"seconds");
 	}
 
 	public List<Member> getMemberList(){

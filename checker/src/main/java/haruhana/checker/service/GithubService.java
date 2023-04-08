@@ -101,23 +101,26 @@ public class GithubService {
 			String kstDateTimeStr = kstDateTime.toLocalDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
 			LocalDate commitDate = LocalDate.parse(kstDateTimeStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-
+			long start3 = System.currentTimeMillis();
 			setInitializeMemberInfo(username,user_email,commitDate,img_url);
+			long end3 = System.currentTimeMillis();
+			System.out.println("logging2="+(double)((end3-start3)/1000.0)+"seconds");
 		}
 		long end2 = System.currentTimeMillis();
-		System.out.println("logging2="+(double)((end2-start2)/1000.0)+"seconds");
+		System.out.println("REDIS BEST="+(double)((end2-start2)/1000.0)+"seconds");
 	}
 
 
 	private void setInitializeMemberInfo(String username,String email,LocalDate commitTime,String imgUrl){
-		long start3 = System.currentTimeMillis();
 		MemberDTO memberDTO=new MemberDTO();
 		memberDTO.setName(username);
 		memberDTO.setEmail(email);
 		memberDTO.setCommitTime(commitTime);
 		memberDTO.setImgUrl(imgUrl);
+		long start3 = System.currentTimeMillis();
 		memberService.setInitializeMemberInfo(memberDTO);
 		long end3 = System.currentTimeMillis();
+		System.out.println("logging3="+(double)((end3-start3)/1000.0)+"seconds");
 	}
 
 	public void useToRestTemplate(){

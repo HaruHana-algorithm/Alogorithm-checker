@@ -54,9 +54,7 @@ public class GithubService {
 			conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Connection", "Keep-Alive");
-			conn.setRequestProperty("Accept-Encoding", "gzip, deflate");
-			conn.setReadTimeout(5000); // 읽기 타임아웃 5초
-			conn.setConnectTimeout(5000); // 연결 타임아웃 5초
+
 			conn.setRequestProperty("Accept", "application/json");
 
 			if (conn.getResponseCode() != 200) {
@@ -68,6 +66,7 @@ public class GithubService {
 			StringBuilder response = new StringBuilder();
 			String output;
 			while ((output = br.readLine()) != null) {
+				System.out.println(output);
 				response.append(output);
 			}
 
@@ -78,7 +77,6 @@ public class GithubService {
 		}
 		long end1 = System.currentTimeMillis();
 		System.out.println("logging1="+((end1-start1)/1000.0)+"seconds");
-
 		JsonParser parser = new JsonParser();
 		JsonArray commits = parser.parse(forObject).getAsJsonArray();
 

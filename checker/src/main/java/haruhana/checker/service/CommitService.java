@@ -78,9 +78,15 @@ public class CommitService {
 			if (memberCommit.getName().equals("Lee.t.c")){
 				continue;
 			}
-			Member findM = memberService.getMemberInfoByName(memberCommit.getName());
 
-			commitRepository.findByMemberAndLocalDate(findM,memberCommit.getCommitTime()).get().updateCommitInfo(State.CHECK);
+			YearMonth yearMonth = YearMonth.now();
+			LocalDate start = yearMonth.atDay(1);
+			LocalDate end = yearMonth.atEndOfMonth();
+			if (start.minusDays(1).isAfter(memberCommit.getCommitTime())&&end.plusDays(1).isBefore(memberCommit.getCommitTime())){
+				Member findM = memberService.getMemberInfoByName(memberCommit.getName());
+
+				commitRepository.findByMemberAndLocalDate(findM,memberCommit.getCommitTime()).get().updateCommitInfo(State.CHECK);
+			}
 		}
 
 

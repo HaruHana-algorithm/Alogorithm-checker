@@ -6,6 +6,7 @@ import haruhana.checker.entity.Member;
 import haruhana.checker.entity.State;
 import haruhana.checker.entity.redis.MemberCommit;
 import haruhana.checker.repo.CommitRepository;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,16 @@ public class CommitService {
 
 	private final MemberCommitService memberCommitService;
 
+	public static YearMonth yearMonth;
+	public static LocalDate start;
+	public static LocalDate end;
+
+	@PostConstruct
+	public void dateInitialize(){
+		yearMonth=YearMonth.now();
+		start=yearMonth.atDay(1);
+		end=yearMonth.atEndOfMonth();
+	}
 
 	public void getTodayLearnCheck(){
 		List<Member> memberList = memberService.getMemberList();
@@ -79,12 +90,9 @@ public class CommitService {
 				continue;
 			}
 
-			YearMonth yearMonth = YearMonth.now();
-			LocalDate start = yearMonth.atDay(1);
-			LocalDate end = yearMonth.atEndOfMonth();
-			if (start.minusDays(1).isAfter(memberCommit.getCommitTime())&&end.plusDays(1).isBefore(memberCommit.getCommitTime())){
+			if (memberCommit.getCommitTime().isAfter(start.minusDays(1))&&memberCommit.getCommitTime().isBefore(end.plusDays(1))){
 				Member findM = memberService.getMemberInfoByName(memberCommit.getName());
-
+				System.out.println("커밋한 멤버="+findM.getName());
 				commitRepository.findByMemberAndLocalDate(findM,memberCommit.getCommitTime()).get().updateCommitInfo(State.CHECK);
 			}
 		}

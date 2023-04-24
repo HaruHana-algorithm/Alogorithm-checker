@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -68,5 +69,12 @@ public class MemberService {
 		memberCommitDTO.setName(memberDTO.getName());
 		memberCommitDTO.setLocalDate(memberDTO.getCommitTime());
 		memberCommitService.saveTempMemberCommitList(memberCommitDTO);
+	}
+
+	// 회원 목록 반환 API
+	public List<Member> getInfoMemberList(){
+		List<Member> memberList = memberRepository.findAll();
+		memberList.sort(Comparator.comparing(Member::getName));
+		return memberList;
 	}
 }

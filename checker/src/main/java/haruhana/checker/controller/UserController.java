@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("//api/repo")
+@RequestMapping("/api/repo")
 public class UserController {
 
 	private final GithubService githubService;

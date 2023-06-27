@@ -16,5 +16,5 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
 
 	List<ProjectionRepository> findProjectionByEmail(@Param("email")String email);
 
-	List<MemberProjectionRepository> findMemberCommitInfo(MemberResponseDTO memberResponseDTO);
+//	List<MemberProjectionRepository> findMemberCommitInfo(MemberResponseDTO memberResponseDTO);
 }

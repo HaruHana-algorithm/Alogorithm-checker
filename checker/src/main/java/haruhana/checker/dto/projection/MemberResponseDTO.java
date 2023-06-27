@@ -1,11 +1,11 @@
 package haruhana.checker.dto.projection;
 
+import lombok.Getter;
+
 import java.time.LocalDate;
 
+@Getter
 public class MemberResponseDTO {
-	private String email;
-
-	public MemberResponseDTO(String email) {
-		this.email = email;
-	}
+	private LocalDate lastCommitDate;
+	private String name;
 }

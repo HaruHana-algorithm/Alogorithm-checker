@@ -1,8 +1,7 @@
 package haruhana.checker.repo;
 
-import haruhana.checker.dto.projection.MemberResponseDTO;
 import haruhana.checker.entity.Member;
-import haruhana.checker.repo.projection.MemberProjectionRepository;
+import haruhana.checker.repo.projection.MemberProjection;
 import haruhana.checker.repo.projection.ProjectionRepository;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,5 +15,5 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
 
 	List<ProjectionRepository> findProjectionByEmail(@Param("email")String email);
 
-//	List<MemberProjectionRepository> findMemberCommitInfo(MemberResponseDTO memberResponseDTO);
+	List<MemberProjection> findByEmail(@Param("email") String email);
 }

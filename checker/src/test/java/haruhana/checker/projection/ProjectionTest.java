@@ -1,11 +1,10 @@
 package haruhana.checker.projection;
 
-import haruhana.checker.dto.projection.MemberResponseDTO;
 import haruhana.checker.entity.State;
 import haruhana.checker.repo.CommitRepository;
 import haruhana.checker.repo.MemberRepository;
 import haruhana.checker.repo.projection.CommitProjection;
-import haruhana.checker.repo.projection.MemberProjectionRepository;
+import haruhana.checker.repo.projection.MemberProjection;
 import haruhana.checker.repo.projection.ProjectionRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,13 +35,15 @@ public class ProjectionTest {
 	@Test
 	public void 클라이언트에게_BODY_전달받은_경우(){
 		//given
-//		LocalDate target = LocalDate.parse("2023-03-01");
 		String email="seonghoo1217@naver.com";
 
 		//when 주어진 LocalDate 기준이상의 값 컬럼 조회
-		List<MemberProjectionRepository> memberCommitInfo = memberRepository.findByEmail(memberResponseDTO);
+		List<MemberProjection> memberCommitInfo = memberRepository.findByEmail(email);
 		memberCommitInfo.forEach(
-				r-> System.out.println("fetchResult="+r.getCommitInfoToDTOProjection().toString())
+				r-> {
+					System.out.println("Name="+r.getName());
+					System.out.println("Last Commit Date="+r.getCommitTime());
+				}
 		);
 	}
 
